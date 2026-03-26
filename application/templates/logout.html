@@ -1,29 +1,83 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}
-Home
-{% endblock %}
-{% block content  %}
 
+{% block title %}Logged Out | DoorMate{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
+<style>
+    .logout-container {
+        height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8fafc;
+    }
 
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>DoorMate</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+    .logout-card {
+        background: white;
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        text-align: center;
+        max-width: 500px;
+        width: 100%;
+        border: 1px solid #e2e8f0;
+    }
 
+    .icon-box {
+        width: 80px;
+        height: 80px;
+        background: #f1f5f9;
+        color: #2563eb;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        margin: 0 auto 25px;
+    }
 
-</head>
+    .logout-card h2 {
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 15px;
+    }
 
-<body class="logout-page">
- <a href="{% url 'logout' %}">Logout</a>
+    .logout-card p {
+        color: #64748b;
+        margin-bottom: 30px;
+    }
 
-</body>
+    .btn-relogin {
+        background-color: #2563eb;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.3s;
+        display: inline-block;
+    }
 
-</html>
+    .btn-relogin:hover {
+        background-color: #1d4ed8;
+        transform: translateY(-2px);
+        color: white;
+    }
+</style>
 
+<div class="logout-container">
+    <div class="logout-card" data-aos="zoom-in">
+        <div class="icon-box">
+            <i class="bi bi-door-open"></i>
+        </div>
+        <h2>You've been logged out</h2>
+        <p>Thank you for using DoorMate. We hope to see you back soon for your next service request!</p>
+
+        <div class="d-grid gap-2">
+            <a href="{% url 'login' %}" class="btn-relogin">Log In Again</a>
+            <a href="{% url 'index' %}" class="btn btn-link text-muted mt-2">Back to Homepage</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

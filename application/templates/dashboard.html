@@ -1,251 +1,291 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .sidebar {
-            height: 100vh;
-            background-color: #343a40;
-            color: #fff;
-        }
-        .sidebar a {
-            color: #ddd;
-            text-decoration: none;
-            padding: 10px;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #495057;
-            color: #fff;
-        }
-        .dashboard-content {
-            margin-left: 250px;
-        }
-    </style>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Client Dashboard | DoorMate{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --sidebar-bg: #1e293b;
+        --content-bg: #f1f5f9;
+        --accent-blue: #3b82f6;
+        --glass-white: rgba(255, 255, 255, 0.9);
+    }
+
+    body {
+        background-color: var(--content-bg);
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Sidebar Refinement */
+    .sidebar {
+        width: 260px;
+        height: 100vh;
+        background-color: var(--sidebar-bg);
+        position: fixed;
+        transition: all 0.3s;
+        box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    }
+
+    .sidebar h4 {
+        color: white;
+        font-weight: 800;
+        letter-spacing: 1px;
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sidebar a {
+        color: #94a3b8;
+        padding: 12px 20px;
+        display: block;
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 8px;
+        margin: 4px 10px;
+        transition: 0.2s;
+    }
+
+    .sidebar a:hover, .sidebar a.active {
+        background-color: var(--accent-blue);
+        color: white;
+    }
+
+    /* Main Content Area */
+    .dashboard-content {
+        margin-left: 260px;
+        padding: 40px;
+    }
+
+    /* Stats Cards */
+    .stat-card {
+        border: none;
+        border-radius: 15px;
+        background: white;
+        transition: transform 0.3s;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .stat-card h4 {
+        font-size: 0.9rem;
+        color: #64748b;
+        text-transform: uppercase;
+        font-weight: 700;
+    }
+
+    .stat-card .display-6 {
+        font-weight: 800;
+        color: var(--sidebar-bg);
+    }
+
+    /* Form & Table Cards */
+    .content-card {
+        background: white;
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+    }
+
+    .card-header-custom {
+        padding: 20px 30px;
+        border-bottom: 1px solid #f1f5f9;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #475569;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .badge-status {
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+</style>
+
 <div class="d-flex">
-    <!-- Sidebar -->
-    <nav class="sidebar p-3">
-        <h4 class="text-center mb-4">Doormate</h4>
-        <a href="#">Dashboard</a>
-        <a href="#profile-section">My Profile</a>
-        <a href="#">My Bookings</a>
-        <a href="#">Payment History</a>
-        <a href="#">Support</a>
-        <a href="{% url 'logout' %}">Logout</a>
+    <nav class="sidebar">
+        <h4 class="text-center">DOORMATE</h4>
+        <div class="mt-4">
+            <a href="#" class="active">Dashboard</a>
+            <a href="#profile-section">My Profile</a>
+            <a href="#">My Bookings</a>
+            <a href="#payment-methods-section">Payments</a>
+            <a href="#">Support</a>
+            <div class="border-top mt-4 pt-4 px-3">
+                <a href="{% url 'logout' %}" class="text-danger">Logout</a>
+            </div>
+        </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="dashboard-content container-fluid">
-        <!-- Welcome Banner -->
-        <div class="bg-light p-4 rounded mb-4">
-            <h2>Welcome, {{ user.username }}!</h2>
-            <p>Your trusted platform for finding reliable services. Here's a quick overview of your account.</p>
+        <div class="content-card bg-primary text-white p-5 mb-4 shadow-lg" style="background: linear-gradient(135deg, #2563eb 0%, #1e293b 100%) !important;">
+            <h1 class="fw-bold">Welcome back, {{ user.username }}!</h1>
+            <p class="lead opacity-75">Manage your service requests and account preferences from one place.</p>
         </div>
 
-        <!-- Stats Section -->
         <div class="row mb-4">
             <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h4 class="card-title">Active Bookings</h4>
-                        <p class="card-text"><strong>3</strong></p>
-                    </div>
+                <div class="card stat-card p-3 text-center">
+                    <h4>Active Bookings</h4>
+                    <div class="display-6">03</div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h4 class="card-title">Completed Services</h4>
-                        <p class="card-text"><strong>15</strong></p>
-                    </div>
+                <div class="card stat-card p-3 text-center">
+                    <h4>Completed</h4>
+                    <div class="display-6">15</div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h4 class="card-title">Pending Payments</h4>
-                        <p class="card-text"><strong>$120</strong></p>
-                    </div>
+                <div class="card stat-card p-3 text-center">
+                    <h4>Balance Due</h4>
+                    <div class="display-6 text-primary">$120</div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h4 class="card-title">Support Tickets</h4>
-                        <p class="card-text"><strong>1</strong></p>
+                <div class="card stat-card p-3 text-center">
+                    <h4>Tickets</h4>
+                    <div class="display-6">01</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7">
+                <div id="profile-section" class="card content-card">
+                    <div class="card-header-custom">My Profile Details</div>
+                    <div class="card-body p-4">
+                        <form enctype="multipart/form-data" method="POST">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="name" value="{{ user.get_full_name }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" name="email" value="{{ user.email }}">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" name="phone" placeholder="+254..." required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Residential Address</label>
+                                <textarea class="form-control" name="address" rows="3" placeholder="Street, City, Building..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary px-4 py-2 fw-bold">Update Profile</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div id="payment-methods-section" class="card content-card">
+                    <div class="card-header-custom">Payment Preferences</div>
+                    <div class="card-body p-4">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="mb-4">
+                                <select class="form-select mb-3 py-3" id="paymentSelector" name="payment_method" onchange="togglePaymentFields()">
+                                    <option value="credit_card">Credit/Debit Card</option>
+                                    <option value="paypal">PayPal</option>
+                                    <option value="bank_transfer">Bank Transfer</option>
+                                </select>
+
+                                <div id="card-fields" class="payment-group">
+                                    <input type="text" class="form-control mb-2" placeholder="Card Number">
+                                    <div class="row">
+                                        <div class="col-6"><input type="text" class="form-control" placeholder="MM/YY"></div>
+                                        <div class="col-6"><input type="text" class="form-control" placeholder="CVV"></div>
+                                    </div>
+                                </div>
+
+                                <div id="paypal-fields" class="payment-group" style="display:none;">
+                                    <input type="email" class="form-control" placeholder="paypal-email@example.com">
+                                </div>
+
+                                <div id="bank-fields" class="payment-group" style="display:none;">
+                                    <input type="text" class="form-control mb-2" placeholder="Account Number">
+                                    <input type="text" class="form-control" placeholder="Bank Name">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-outline-primary w-100 fw-bold">Save Payment Method</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Profile Section -->
-        <div id="profile-section" class="mb-4">
-         <h3>My Profile</h3>
-    <div class="card p-4">
-        <form enctype="multipart/form-data" method="POST">
-            {% csrf_token %}
-
-            <!-- Full Name -->
-            <div class="mb-3">
-                <label for="name" class="form-label">Full Name</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ user.first_name }} {{ user.last_name }}">
+        <div class="card content-card">
+            <div class="card-header-custom d-flex justify-content-between align-items-center">
+                <span>Recent Service History</span>
+                <button class="btn btn-sm btn-light">View All</button>
             </div>
-
-            <!-- Email -->
-            <div class="mb-3">
-                <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Service Type</th>
+                            <th>Provider</th>
+                            <th>Date Requested</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">Plumbing Repair</td>
+                            <td>John Doe</td>
+                            <td>Dec 10, 2024</td>
+                            <td><span class="badge bg-warning text-dark badge-status">In Progress</span></td>
+                            <td><button class="btn btn-sm btn-outline-secondary">Details</button></td>
+                        </tr>
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">House Cleaning</td>
+                            <td>Jane Smith</td>
+                            <td>Dec 07, 2024</td>
+                            <td><span class="badge bg-success badge-status">Completed</span></td>
+                            <td><button class="btn btn-sm btn-outline-secondary">Details</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-
-            <!-- Phone Number -->
-            <div class="mb-3">
-                <label for="phone" class="form-label">Phone Number</label>
-                <input type="text" id="phone" name="name" required minlength="10" maxlength="13" size="10"
-            </div>
-
-            <!-- Address -->
-            <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <textarea id="address" name="address" rows="3" cols="30"></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-        </form>
-    </div>
-</div>
-
-<!--        -->
-<div id="payment-methods-section" class="mb-4">
-    <h3>Payment Methods</h3>
-    <div class="card p-4">
-        <form method="POST">
-            {% csrf_token %}
-            <p>Select your preferred payment method:</p>
-
-            <!-- Payment Choices -->
-            <div class="mb-3">
-                <label class="form-label">Choose a Payment Option:</label>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="payment_method" id="creditCard" value="credit_card" required>
-                    <label class="form-check-label" for="creditCard">
-                        Credit Card
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="payment_method" id="debitCard" value="debit_card">
-                    <label class="form-check-label" for="debitCard">
-                        Debit Card
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal">
-                    <label class="form-check-label" for="paypal">
-                        PayPal
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="payment_method" id="bankTransfer" value="bank_transfer">
-                    <label class="form-check-label" for="bankTransfer">
-                        Bank Transfer
-                    </label>
-                </div>
-            </div>
-
-            <!-- Credit/Debit Card Details -->
-            <div id="card-details" class="mt-3" style="display: none;">
-                <label for="cardNumber" class="form-label">Card Number</label>
-                <input type="text" class="form-control mb-2" id="cardNumber" name="card_number" placeholder="1234 5678 9012 3456">
-
-                <label for="expiryDate" class="form-label">Expiry Date</label>
-                <input type="month" class="form-control mb-2" id="expiryDate" name="expiry_date">
-
-                <label for="cvv" class="form-label">CVV</label>
-                <input type="text" class="form-control mb-3" id="cvv" name="cvv" placeholder="123">
-            </div>
-
-            <!-- Bank Transfer Details -->
-            <div id="bank-details" class="mt-3" style="display: all;">
-                <label for="bankName" class="form-label">Bank Name</label>
-                <input type="text" class="form-control mb-2" id="bankName" name="bank_name" placeholder="Enter bank name">
-
-                <label for="accountNumber" class="form-label">Account Number</label>
-                <input type="text" class="form-control mb-2" id="accountNumber" name="account_number" placeholder="Enter account number">
-            </div>
-
-            <!-- PayPal Details -->
-            <div id="paypal-details" class="mt-3" style="display: all;">
-                <label for="paypalEmail" class="form-label">PayPal Email</label>
-                <input type="email" class="form-control mb-3" id="paypalEmail" name="paypal_email" placeholder="example@paypal.com">
-            </div>
-
-            <button type="submit" class="btn btn-primary">Save Payment Method</button>
-        </form>
-    </div>
-</div>
-
-        <!-- Recent Bookings Section -->
-        <div class="mb-4">
-            <h3>Recent Bookings</h3>
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Service</th>
-                    <th>Provider</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>Plumbing</td>
-                    <td>John Doe</td>
-                    <td>2024-12-10</td>
-                    <td><span class="badge bg-warning text-dark">In Progress</span></td>
-                    <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
-                </tr>
-                <tr>
-                    <td>Cleaning</td>
-                    <td>Jane Smith</td>
-                    <td>2024-12-07</td>
-                    <td><span class="badge bg-success">Completed</span></td>
-                    <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
-                </tr>
-                <tr>
-                    <td>Electrical Work</td>
-                    <td>Mike Johnson</td>
-                    <td>2024-12-05</td>
-                    <td><span class="badge bg-danger">Cancelled</span></td>
-                    <td><a href="#" class="btn btn-primary btn-sm">View</a></td>
-                </tr>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
 <script>
-    function previewImage(event) {
-        const reader = new FileReader();
-        reader.onload = function () {
-            const output = document.getElementById('profilePreview');
-            output.src = reader.result;
+    function togglePaymentFields() {
+        const method = document.getElementById('paymentSelector').value;
+        const groups = {
+            'credit_card': 'card-fields',
+            'paypal': 'paypal-fields',
+            'bank_transfer': 'bank-fields'
         };
-        reader.readAsDataURL(event.target.files[0]);
+
+        // Hide all groups
+        Object.values(groups).forEach(id => {
+            document.getElementById(id).style.display = 'none';
+        });
+
+        // Show selected group
+        document.getElementById(groups[method]).style.display = 'block';
     }
 </script>
+{% endblock %}
 
 

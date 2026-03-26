@@ -1,155 +1,210 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}
-Profile
-{% endblock %}
+{% block title %}My Profile | DoorMate{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-  <h1 class="text-center mb-4">My Profile</h1>
-  <div class="card shadow p-4">
-    <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-
-      <!-- Profile Picture -->
-      <div class="text-center mb-4">
-       <label for="image">Choose a profile picture:</label>
-       <input type="file" id="image" name="image" accept="image/png, image/jpeg" />
-
-      </div>
-
-      <!-- Full Name -->
-      <div class="mb-3">
-        <label for="full_name" class="form-label">Full Name</label>
-        <input type="text" name="full_name" id="full_name" class="form-control" value="{{ user.get_full_name }}">
-      </div>
-
-      <!-- Email -->
-      <div class="mb-3">
-        <label for="email" class="form-label">Email Address</label>
-        <input type="email" name="email" id="email" class="form-control" value="{{ user.email }}">
-      </div>
-
-      <!-- Services Offered -->
-      <div class="mb-3">
-        <label for="services" class="form-label">Services Offered</label>
-        <select name="services" id="services" class="form-select">
-          <option value="house_cleaning" {% if user.profile.service == 'house_cleaning' %}selected{% endif %}>House Cleaning/Maids</option>
-          <option value="plumbing" {% if user.profile.service == 'plumbing' %}selected{% endif %}>Plumbing</option>
-          <option value="tutoring" {% if user.profile.service == 'tutoring' %}selected{% endif %}>Tutoring</option>
-          <option value="chefs" {% if user.profile.service == 'chefs' %}selected{% endif %}>Chefs</option>
-          <option value="drivers" {% if user.profile.service == 'drivers' %}selected{% endif %}>Drivers</option>
-        </select>
-      </div>
-
-      <!-- Phone Number -->
-      <div class="mb-3">
-        <label for="phone" class="form-label">Phone Number</label>
-        <input type="text" id="phone" name="name" required minlength="10" maxlength="13" size="10" />
-      </div>
-
-      <!-- Address -->
-      <div class="mb-3">
-        <label for="about" class="form-label">About</label>
-        <textarea id="about" name="about" rows="2" cols="30"></textarea>
-      </div>
-
-      <!-- About -->
-      <div class="mb-3">
-        <label for="address" class="form-label">Address</label>
-        <input type="text" id="address" name="about" required minlength="20" maxlength="100" size="10" />
-
-      </div>
-
-      <!-- Rate Charged -->
-      <div class="mb-3">
-        <label for="rate" class="form-label">Rate Charged</label>
-        <input id="rate" type="number" name="rate" value="0" />
-      </div>
-
-      <!-- Location -->
-      <div class="mb-3">
-        <label for="location" class="form-label">location</label>
-        <input type="text" id="location" name="location" required minlength="10" maxlength="20" size="10" />
-
-      </div>
-
-      <button type="submit" class="btn btn-primary">Save Changes</button>
-    </form>
-  </div>
-
-  <!-- Visible Profiles -->
-  <div class="my-5">
-    <h2 class="text-center">Available Professionals</h2>
-    <div class="row">
-      {% for worker in workers %}
-      <div class="col-md-4 mb-4">
-        <div class="card shadow">
-         <input type="file" id="imag" name="image" accept="image/png, image/jpeg" />
-      </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ worker.full_name }}</h5>
-            <p class="card-text"><strong>Service:</strong> {{ worker.get_service_display }}</p>
-            <p class="card-text"><strong>Email:</strong> {{ worker.email }}</p>
-            <p class="card-text"><strong>Phone:</strong> {{ worker.phone }}</p>
-            <p class="card-text"><strong>About:</strong> {{ worker.about }}</p>
-            <p class="card-text"><strong>Rate:</strong> ${{ worker.rate }}/hr</p>
-            <p class="card-text"><strong>Location:</strong> {{ worker.location }}</p>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
 <style>
-  .container {
-    max-width: 800px;
-  }
+    :root {
+        --primary-blue: #2563eb;
+        --soft-slate: #f1f5f9;
+        --text-main: #1e293b;
+    }
 
-  .card {
-    border-radius: 15px;
-    overflow: hidden;
-  }
+    body { background-color: #f8fafc; }
 
-  .card-body {
-    padding: 20px;
-  }
+    /* Profile Header Card */
+    .profile-header {
+        background: linear-gradient(135deg, #1e293b 0%, #2563eb 100%);
+        border-radius: 24px;
+        padding: 40px;
+        color: white;
+        margin-bottom: -60px; /* Overlap effect */
+        position: relative;
+        z-index: 2;
+    }
 
-  .form-label {
-    font-weight: bold;
-  }
+    .form-card {
+        background: white;
+        border-radius: 24px;
+        padding: 80px 40px 40px; /* Extra top padding for overlap */
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        border: none;
+    }
 
-  .btn-primary {
-    width: 100%;
-    padding: 10px;
-    font-size: 1.1rem;
-  }
+    /* Input Styling */
+    .form-label {
+        font-weight: 700;
+        color: var(--text-main);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 
-  .text-center {
-    text-align: center;
-  }
+    .form-control, .form-select {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 15px;
+        transition: 0.3s;
+    }
 
-  .mb-4 {
-    margin-bottom: 1.5rem;
-  }
+    .form-control:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
 
-  .mb-3 {
-    margin-bottom: 1rem;
-  }
+    /* Worker Grid Enhancements */
+    .worker-card {
+        border: none;
+        border-radius: 20px;
+        transition: 0.3s;
+        background: white;
+    }
 
-  .my-5 {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
+    .worker-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
 
-  .shadow {
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  .form-control-file {
-    border: 1px solid #ddd;
-    padding: 5px;
-  }
+    .profile-img-circle {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 4px solid white;
+        background: #e2e8f0;
+    }
+
+    .btn-save {
+        background: var(--primary-blue);
+        border: none;
+        padding: 15px;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: 0.3s;
+    }
+
+    .btn-save:hover {
+        background: #1d4ed8;
+        transform: scale(1.01);
+    }
 </style>
 
+<div class="container my-5">
+    <div class="profile-header text-center shadow">
+        <div class="d-inline-block position-relative mb-3">
+            <i class="bi bi-person-badge display-3"></i>
+        </div>
+        <h1 class="fw-bold">Professional Profile</h1>
+        <p class="opacity-75">Control how you appear to clients in the marketplace</p>
+    </div>
 
+    <div class="card form-card">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <h5 class="fw-bold mb-4 text-primary"><i class="bi bi-person-vcard me-2"></i>Personal Details</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="full_name" class="form-control" value="{{ user.get_full_name }}" placeholder="John Doe">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Contact Email</label>
+                        <input type="email" name="email" class="form-control" value="{{ user.email }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="text" name="phone" class="form-control" placeholder="0712 345 678">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Detailed Address</label>
+                        <input type="text" name="address" class="form-control" placeholder="Building, Street, Area">
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <h5 class="fw-bold mb-4 text-primary"><i class="bi bi-briefcase me-2"></i>Service Info</h5>
+
+                    <div class="row g-3">
+                        <div class="col-md-7">
+                            <label class="form-label">Service Category</label>
+                            <select name="services" class="form-select">
+                                <option value="house_cleaning">House Cleaning/Maids</option>
+                                <option value="plumbing">Plumbing</option>
+                                <option value="tutoring">Tutoring</option>
+                                <option value="chefs">Chefs</option>
+                                <option value="drivers">Drivers</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label">Hourly Rate ($)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white">$</span>
+                                <input type="number" name="rate" class="form-control" value="25">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label class="form-label">Current City</label>
+                        <input type="text" name="location" class="form-control" placeholder="e.g. Nakuru">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Profile Image</label>
+                        <input type="file" name="image" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Professional Summary (About You)</label>
+                    <textarea name="about" rows="4" class="form-control" placeholder="Write a few sentences about your skills and reliability..."></textarea>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary btn-save w-100 shadow-sm">
+                        <i class="bi bi-check2-circle me-2"></i>Save My Profile
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="mt-5 pt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Explore Other Pros</h2>
+            <a href="{% url 'workers' %}" class="text-decoration-none fw-bold">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+
+        <div class="row g-4">
+            {% for worker in workers|slice:":3" %}
+            <div class="col-md-4">
+                <div class="card worker-card shadow-sm h-100 p-3">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-person-circle fs-1 text-secondary"></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="fw-bold mb-0 text-dark">{{ worker.full_name }}</h6>
+                            <small class="text-primary fw-bold">{{ worker.get_service_display }}</small>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-3">{{ worker.about|truncatechars:90 }}</p>
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                        <span class="fw-bold text-dark">${{ worker.rate }}<small class="text-muted">/hr</small></span>
+                        <a href="mailto:{{ worker.email }}" class="btn btn-sm btn-light rounded-pill px-3">Hire Me</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

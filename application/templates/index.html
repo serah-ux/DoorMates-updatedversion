@@ -1,139 +1,153 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}Home{% endblock %}
+
 {% block content %}
+<style>
+  /* Hero Carousel Adjustments */
+  .carousel-item img {
+    object-fit: cover;
+    filter: brightness(60%); /* Makes text pop more */
+  }
 
-<!DOCTYPE html>
-<html lang="en">
+  .carousel-caption {
+    bottom: 20%;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>DoorMate</title>
-  <meta name="description" content="Find reliable service professionals through DoorMate">
-  <meta name="keywords" content="DoorMate, services, house cleaning, plumbing, tutoring">
+  .carousel-caption h1 {
+    font-weight: 800;
+    font-size: 3.5rem;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+  }
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
-</head>
+  /* Testimonials */
+  .testimonial-card {
+    border: none;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+  }
 
-<body>
+  .testimonial-card:hover {
+    transform: translateY(-10px);
+  }
 
-  <!-- Hero Section -->
-  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
-    </div>
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="{% static 'assets/img/house_cleaning.jpg' %}" class="d-block w-100" alt="House Cleaning" height="700px">
-        <div class="carousel-caption d-none d-md-block">
-          <h1 class="text-white">Find Trusted Professionals</h1>
-          <p>From house cleaning to plumbing, we've got you covered.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="{% static 'assets/img/plumbing.jpg' %}" class="d-block w-100" alt="Plumbing Services" height="700px">
-        <div class="carousel-caption d-none d-md-block">
-          <h1 class="text-white">Plumbing Services</h1>
-          <p>Efficient and reliable plumbers at your doorstep.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="{% static 'assets/img/coding.jpg' %}" class="d-block w-100" alt="Tutoring Services" height="700px">
-        <div class="carousel-caption d-none d-md-block">
-          <h1 class="text-white">Expert Tutors</h1>
-          <p>Personalized learning experiences for all ages.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="{% static 'assets/img/chef.jpg' %}" class="d-block w-100" alt="Chef Services" height="700px">
-        <div class="carousel-caption d-none d-md-block">
-          <h1 class="text-white">Professional Chefs</h1>
-          <p>Delicious meals tailored to your taste, cooked by experts.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="{% static 'assets/img/electrician.jpg' %}" class="d-block w-100" alt="Chef Services" height="700px">
-        <div class="carousel-caption d-none d-md-block">
-          <h1 class="text-white">Experienced Electricians</h1>
-          <p>Safe and reliable electrical solutions tailored to your needs.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="{% static 'assets/img/driver.jpg' %}" class="d-block w-100" alt="Driver Services" height="700px">
-        <div class="carousel-caption d-none d-md-block">
-          <h1 class="text-white">Reliable Drivers</h1>
-          <p>Safe and professional transportation for all your needs.</p>
-        </div>
-      </div>
-    </div>
+  .quote-icon {
+    font-size: 2rem;
+    color: #2563eb;
+    opacity: 0.3;
+  }
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
+  /* Newsletter CTA */
+  .newsletter-section {
+    background: linear-gradient(135deg, #1e293b 0%, #2563eb 100%);
+    border-radius: 30px;
+    margin: 60px 0;
+    padding: 60px;
+  }
+</style>
+
+<div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+    <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3"></button>
   </div>
 
-  <!-- Testimonials Section -->
-  <section class="testimonials py-5 bg-light" id="testimonials">
-    <div class="container">
-      <h2 class="text-center mb-4">What Our Clients Say</h2>
-      <div class="row">
-        <div class="col-md-6 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <p class="card-text">“Doormate made finding a reliable housekeeper a breeze! It’s such a relief knowing I can trust the service providers. Highly recommend!”</p>
-              <h5 class="card-title">- James Smith</h5>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'assets/img/house_cleaning.jpg' %}" class="d-block w-100" alt="Cleaning" height="650px">
+      <div class="carousel-caption d-none d-md-block">
+        <h1>Trusted House Help</h1>
+        <p class="lead">From routine cleaning to deep sanitization, find the best maids near you.</p>
+        <a href="{% url 'workers' %}" class="btn btn-primary btn-lg px-4 mt-3">Book Now</a>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <img src="{% static 'assets/img/plumbing.jpg' %}" class="d-block w-100" alt="Plumbing" height="650px">
+      <div class="carousel-caption d-none d-md-block">
+        <h1>Expert Plumbing</h1>
+        <p class="lead">Emergency repairs or installations? Our vetted plumbers are ready to help.</p>
+        <a href="{% url 'workers' %}" class="btn btn-primary btn-lg px-4 mt-3">Find a Plumber</a>
+      </div>
+    </div>
+
+    <div class="carousel-item">
+      <img src="{% static 'assets/img/chef.jpg' %}" class="d-block w-100" alt="Chefs" height="650px">
+      <div class="carousel-caption d-none d-md-block">
+        <h1>Professional Chefs</h1>
+        <p class="lead">Enjoy culinary excellence in the comfort of your own home.</p>
+        <a href="{% url 'workers' %}" class="btn btn-primary btn-lg px-4 mt-3">Hire a Chef</a>
+      </div>
+    </div>
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">What Our Community Says</h2>
+      <p class="text-muted">Real experiences from clients who found help through DoorMate.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card testimonial-card p-4">
+          <div class="card-body">
+            <i class="bi bi-quote quote-icon"></i>
+            <p class="card-text fs-5 italic">"DoorMate made finding a reliable housekeeper a breeze! It’s such a relief knowing I can trust the providers. Highly recommend!"</p>
+            <div class="d-flex align-items-center mt-4">
+              <div class="ms-3">
+                <h6 class="mb-0 fw-bold">James Smith</h6>
+                <small class="text-muted">Verified Client</small>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-6 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <p class="card-text">“I needed a plumber urgently for a pipe burst. Doormate connected me with a professional within minutes, and the problem was fixed the same day.”</p>
-              <h5 class="card-title">- Kate Smith</h5>
+      </div>
+      <div class="col-md-6">
+        <div class="card testimonial-card p-4">
+          <div class="card-body">
+            <i class="bi bi-quote quote-icon"></i>
+            <p class="card-text fs-5 italic">"I needed a plumber urgently for a pipe burst. DoorMate connected me with a pro within minutes, and it was fixed the same day."</p>
+            <div class="d-flex align-items-center mt-4">
+              <div class="ms-3">
+                <h6 class="mb-0 fw-bold">Kate Smith</h6>
+                <small class="text-muted">Verified Client</small>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<div class="container">
+  <section class="newsletter-section text-white text-center">
+    <h2 class="fw-bold mb-3">Never Miss an Update</h2>
+    <p class="opacity-75 mb-4">Join 5,000+ others receiving the best service tips and exclusive DoorMate offers.</p>
+    <form class="d-flex justify-content-center gap-2">
+      <input type="email" class="form-control w-50 py-3 rounded-pill" placeholder="yourname@email.com">
+      <button type="submit" class="btn btn-warning px-5 rounded-pill fw-bold">Subscribe</button>
+    </form>
   </section>
-
-  <!-- Call To Action Section -->
-  <section id="call-to-action" class="call-to-action py-5 text-white" style="background-color: #343a40;">
-    <div class="container text-center">
-      <h3>Join Our Newsletter</h3>
-      <p>Stay updated with the latest offers and tips from DoorMate.</p>
-      <form action="#" method="post" class="d-flex justify-content-center mt-3">
-        <input type="email" name="email" class="form-control w-50 me-2" placeholder="Enter your email">
-        <button type="submit" class="btn btn-primary">Subscribe</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- Scroll Top Button -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Preloader -->
-  <div id="preloader"></div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+</div>
 
 {% endblock %}
 

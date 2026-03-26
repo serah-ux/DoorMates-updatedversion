@@ -1,30 +1,196 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}
-Workers
-{% endblock %}
+{% block title %}Find Professionals | DoorMate{% endblock %}
 
 {% block content %}
-<div class="container my-5">
-  <h1 class="text-center mb-4">Available Workers</h1>
-  <div class="row">
-    {% for worker in workers %}
-    <div class="col-md-4 mb-4">
-      <div class="card shadow">
-        <input type="file" id="imag" name="image" accept="image/png, image/jpeg" />
-        <div class="card-body">
-          <h5 class="card-title">{{ worker.full_name }}</h5>
-          <p class="card-text"><strong>Service:</strong> {{ worker.get_service_display }}</p>
-          <p class="card-text"><strong>Rate:</strong> {{ worker.rate }} per hour</p>
-          <p class="card-text"><strong>About:</strong> {{ worker.description }}</p>
-          <p class="card-text"><strong>Email:</strong> {{ worker.email }}</p>
-          <p class="card-text"><strong>Phone:</strong> {{ worker.phone }}</p>
-          <p class="card-text"><strong>Address:</strong> {{ worker.address }}</p>
-        </div>
-      </div>
+<style>
+    :root {
+        --primary-blue: #2563eb;
+        --bg-soft: #f8fafc;
+    }
+
+    body {
+        background-color: var(--bg-soft);
+    }
+
+    /* Page Header */
+    .workers-header {
+        background: linear-gradient(135deg, #1e293b 0%, #2563eb 100%);
+        color: white;
+        padding: 60px 0;
+        margin-bottom: 40px;
+        border-radius: 0 0 40px 40px;
+    }
+
+    /* Worker Card Design */
+    .worker-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .worker-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .worker-image-area {
+        height: 200px;
+        background: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .worker-image-area i {
+        font-size: 4rem;
+        color: #94a3b8;
+    }
+
+    .service-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--primary-blue);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .worker-info {
+        padding: 25px;
+    }
+
+    .worker-name {
+        font-weight: 800;
+        color: #1e293b;
+        margin-bottom: 5px;
+    }
+
+    .worker-rate {
+        color: var(--primary-blue);
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .worker-desc {
+        font-size: 0.9rem;
+        color: #64748b;
+        height: 4.5em; /* Limits height to ~3 lines */
+        overflow: hidden;
+        margin-bottom: 20px;
+    }
+
+    .contact-btn {
+        background: #f1f5f9;
+        color: #475569;
+        border: none;
+        padding: 10px;
+        border-radius: 10px;
+        width: 100%;
+        font-weight: 600;
+        transition: 0.2s;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+
+    .contact-btn:hover {
+        background: var(--primary-blue);
+        color: white;
+    }
+
+    /* Filters sidebar */
+    .filter-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        position: sticky;
+        top: 100px;
+    }
+</style>
+
+<div class="workers-header text-center">
+    <div class="container">
+        <h1 class="display-5 fw-bold">Available Professionals</h1>
+        <p class="lead opacity-75">Vetted experts ready to help with your home and personal needs.</p>
     </div>
-    {% endfor %}
-  </div>
 </div>
 
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-3 mb-4">
+            <div class="filter-card shadow-sm">
+                <h5 class="fw-bold mb-3">Filter Services</h5>
+                <form method="GET">
+                    <div class="mb-3">
+                        <select class="form-select border-0 bg-light" name="service">
+                            <option value="">All Services</option>
+                            <option value="plumbing">Plumbing</option>
+                            <option value="house_cleaning">Cleaning</option>
+                            <option value="tutoring">Tutoring</option>
+                            <option value="chefs">Chefs</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary w-100">Apply Filter</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-9">
+            <div class="row">
+                {% for worker in workers %}
+                <div class="col-md-6 col-xl-4 mb-4">
+                    <div class="worker-card h-100">
+                        <div class="worker-image-area">
+                            {% if worker.image %}
+                                <img src="{{ worker.image.url }}" class="w-100 h-100" style="object-fit: cover;">
+                            {% else %}
+                                <i class="bi bi-person-circle"></i>
+                            {% endif %}
+                            <span class="service-badge">{{ worker.get_service_display }}</span>
+                        </div>
+
+                        <div class="worker-info d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="worker-name mb-0">{{ worker.full_name }}</h5>
+                                <span class="worker-rate">${{ worker.rate }}<small>/hr</small></span>
+                            </div>
+
+                            <p class="small text-muted mb-3"><i class="bi bi-geo-alt-fill me-1"></i> {{ worker.location|default:"Nakuru, Kenya" }}</p>
+
+                            <p class="worker-desc">{{ worker.description|default:"No description provided by this professional yet." }}</p>
+
+                            <div class="mt-auto pt-3 border-top">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <a href="mailto:{{ worker.email }}" class="contact-btn small">Email</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="tel:{{ worker.phone }}" class="contact-btn small">Call</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-search display-1 text-muted"></i>
+                    <h3 class="mt-3">No workers found</h3>
+                    <p class="text-muted">Try adjusting your filters or search criteria.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

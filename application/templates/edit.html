@@ -1,27 +1,129 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Edit appointment
+Edit Appointment | DoorMate
 {% endblock %}
 
-
 {% block content %}
-<h3 style="text-align: center; font-size: 30px;">Edit appointment</h3>
-<div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+<style>
+    :root {
+        --primary-teal: #2c7c8f;
+        --soft-bg: #f8fafc;
+    }
 
-    {{ form.as_p }}
-    <button class="btn btn-success">Update</button>
-    <a href="" class="btn btn-secondary">Cancel</a>
-</form>
+    body {
+        background-color: var(--soft-bg);
+    }
 
+    .edit-container {
+        max-width: 700px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    /* Card Styling */
+    .edit-card {
+        background: white;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    .edit-header {
+        background: linear-gradient(135deg, #1e293b 0%, #2c7c8f 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .edit-header h3 {
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.5px;
+    }
+
+    /* Form Styling */
+    .form-wrapper {
+        padding: 40px;
+    }
+
+    /* Target Django's form paragraphs */
+    .form-wrapper p {
+        margin-bottom: 20px;
+    }
+
+    .form-wrapper label {
+        display: block;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 8px;
+    }
+
+    .form-wrapper input,
+    .form-wrapper select,
+    .form-wrapper textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .form-wrapper input:focus {
+        outline: none;
+        border-color: var(--primary-teal);
+        box-shadow: 0 0 0 3px rgba(44, 124, 143, 0.1);
+    }
+
+    /* Button Styling */
+    .btn-update {
+        background-color: var(--primary-teal);
+        border: none;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 700;
+        transition: transform 0.2s;
+    }
+
+    .btn-update:hover {
+        background-color: #236474;
+        transform: translateY(-2px);
+    }
+
+    .btn-cancel {
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        margin-left: 10px;
+    }
+</style>
+
+<div class="container edit-container">
+    <div class="card edit-card">
+        <div class="edit-header">
+            <h3>Modify Appointment</h3>
+            <p class="mb-0 opacity-75">Update your time or service details below</p>
         </div>
 
-    <div class="col-md-3"></div>
+        <div class="form-wrapper">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="django-form-content">
+                    {{ form.as_p }}
+                </div>
+
+                <div class="d-flex mt-4">
+                    <button type="submit" class="btn btn-success btn-update flex-grow-1">
+                        Update Appointment
+                    </button>
+                    <a href="{% url 'index' %}" class="btn btn-secondary btn-cancel">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-
-
 {% endblock %}

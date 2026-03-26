@@ -1,39 +1,155 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Contact
+Contact Us | DoorMate
 {% endblock %}
-
-
 
 {% block content %}
-<h1 style="text-align: center; font-family: 'Arial, sans-serif'; font-size: 2.5rem; color: #2c7c8f; margin-bottom: 20px; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);">
-    Get in Touch with Us
-</h1>
+<style>
+    :root {
+        --primary-teal: #2c7c8f;
+        --soft-bg: #f0f4f8;
+    }
 
-<div class="row">
+    body {
+        background-color: var(--soft-bg);
+    }
 
-    <div class="col-md-6">
-        <img src="https://cdn.pixabay.com/photo/2019/06/02/17/33/woman-4246954_960_720.jpg"alt="" width="100%" height="100%; margin:17px;">
+    .contact-container {
+        padding: 60px 0;
+    }
+
+    /* Modern Heading */
+    .contact-header {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        color: var(--primary-teal);
+        text-align: center;
+        margin-bottom: 40px;
+        letter-spacing: -1px;
+    }
+
+    /* Glass Card Effect */
+    .contact-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        border: none;
+    }
+
+    /* Image Section */
+    .contact-image-container {
+        position: relative;
+        min-height: 400px;
+        background: url('https://cdn.pixabay.com/photo/2019/06/02/17/33/woman-4246954_960_720.jpg') center/cover no-repeat;
+    }
+
+    .image-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(44, 124, 143, 0.8), transparent);
+        padding: 40px;
+        color: white;
+    }
+
+    /* Form Styling */
+    .form-wrapper {
+        padding: 40px;
+    }
+
+    .form-wrapper h3 {
+        font-weight: 700;
+        color: #334155;
+        margin-bottom: 25px;
+    }
+
+    /* Styling the Django Form specifically */
+    .form-wrapper p label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #64748b;
+    }
+
+    .form-wrapper p input,
+    .form-wrapper p textarea,
+    .form-wrapper p select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-wrapper p input:focus {
+        outline: none;
+        border-color: var(--primary-teal);
+        box-shadow: 0 0 0 3px rgba(44, 124, 143, 0.1);
+    }
+
+    .btn-send {
+        background-color: var(--primary-teal);
+        border: none;
+        padding: 15px;
+        font-weight: 700;
+        border-radius: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: transform 0.2s;
+    }
+
+    .btn-send:hover {
+        background-color: #236474;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container contact-container">
+    <h1 class="contact-header">Get in Touch with Us</h1>
+
+    <div class="card contact-card">
+        <div class="row g-0">
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="contact-image-container h-100">
+                    <div class="image-overlay">
+                        <h4>We're here to help</h4>
+                        <p class="mb-0">Our support team usually responds within 24 hours.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="form-wrapper">
+                    <h3>Send a Message</h3>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+
+                        <div class="django-form-fields">
+                            {{ form.as_p }}
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-send w-100 mt-3">
+                            Send Message
+                        </button>
+                    </form>
+
+                    <div class="mt-5 pt-4 border-top">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="me-3 text-teal">📍</span>
+                            <span class="text-muted small">123 Professional Way, Suite 500</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="me-3 text-teal">📞</span>
+                            <span class="text-muted small">+1 (555) 000-DOOR</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="col-md-6">
-       <form action="" method="POST" >
-           {% csrf_token %}
-   <h3 style="font-family: 'Verdana, sans-serif'; color: #2c7c8f; text-align: center; font-weight: bold; margin-top: 20px; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);">
-    Contact Us Through
-</h3>
-
-     {{ form.as_p }}
-     <button type="submit" class="btn btn-success" style="width: 100%">SEND MESSAGE</button>
-    </form>
-    </div>
-
 </div>
-
-
 {% endblock %}
-
-<div class="col-md-6">
-        <img src="https://img.freepik.com/premium-photo/young-doctor-with-phone-isolated-happy-doctor-with-phone-isolated-background-smiling-doctor-using-cellphone-isolated_550253-2699.jpg" alt="" width="100%" height="100%; margin:17px;">
-    </div>

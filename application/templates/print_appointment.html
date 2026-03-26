@@ -3,31 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Print Appointment</title>
+    <title>Appointment Confirmation | DoorMate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        :root {
+            --primary-blue: #2563eb;
+            --text-dark: #1e293b;
         }
-        .container {
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+            padding: 40px 20px;
+            color: var(--text-dark);
+        }
+
+        .receipt-container {
             max-width: 600px;
             margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            position: relative;
         }
+
+        /* Decorative "Punch Hole" effect */
+        .receipt-container::before, .receipt-container::after {
+            content: "";
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            background-color: #f1f5f9;
+            border-radius: 50%;
+            top: 50%;
+        }
+        .receipt-container::before { left: -10px; }
+        .receipt-container::after { right: -10px; }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px dashed #e2e8f0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin: 5px 0 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .detail-label {
+            font-weight: 700;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            color: var(--text-dark);
+            text-align: right;
+        }
+
+        .message-box {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .actions {
+            margin-top: 40px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
         .btn {
-            display: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .btn-print {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-back {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Print Settings */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .receipt-container {
+                box-shadow: none;
+                border: 1px solid #eee;
+                max-width: 100%;
+            }
+            .actions {
+                display: none; /* Hides buttons when printing */
+            }
+            .receipt-container::before, .receipt-container::after {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Appointment Details</h2>
-        <p><strong>Name:</strong> {{ appointment.name }}</p>
-        <p><strong>Gender:</strong> {{ appointment.gender }}</p>
-        <p><strong>Date:</strong> {{ appointment.date }}</p>
-        <p><strong>Time:</strong> {{ appointment.time }}</p>
-        <p><strong>Email:</strong> {{ appointment.email }}</p>
-        <p><strong>Message:</strong> {{ appointment.message }}</p>
-        <button class="btn" onclick="window.print()">Print</button>
+    <div class="receipt-container">
+        <div class="header">
+            <h2>DoorMate</h2>
+            <p>Appointment Confirmation Slip</p>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Client Name:</span>
+            <span class="detail-value">{{ appointment.name }}</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Gender:</span>
+            <span class="detail-value">{{ appointment.gender }}</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Service Date:</span>
+            <span class="detail-value">{{ appointment.date }}</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Scheduled Time:</span>
+            <span class="detail-value">{{ appointment.time }}</span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">{{ appointment.email }}</span>
+        </div>
+
+        <div class="message-box">
+            <div class="detail-label" style="margin-bottom: 5px;">Special Instructions/Message:</div>
+            {{ appointment.message|default:"No special instructions provided." }}
+        </div>
+
+        <div class="header" style="border-bottom: none; border-top: 2px dashed #e2e8f0; margin-top: 30px; padding-top: 20px;">
+            <p>Thank you for choosing DoorMate. Please present this slip to your service provider.</p>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-print" onclick="window.print()">
+                Print Confirmation
+            </button>
+            <a href="javascript:history.back()" class="btn btn-back">Go Back</a>
+        </div>
     </div>
 </body>
 </html>
