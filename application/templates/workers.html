@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Workers
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="text-center mb-4">Available Workers</h1>
+  <div class="row">
+    {% for worker in workers %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow">
+        <input type="file" id="imag" name="image" accept="image/png, image/jpeg" />
+        <div class="card-body">
+          <h5 class="card-title">{{ worker.full_name }}</h5>
+          <p class="card-text"><strong>Service:</strong> {{ worker.get_service_display }}</p>
+          <p class="card-text"><strong>Rate:</strong> {{ worker.rate }} per hour</p>
+          <p class="card-text"><strong>About:</strong> {{ worker.description }}</p>
+          <p class="card-text"><strong>Email:</strong> {{ worker.email }}</p>
+          <p class="card-text"><strong>Phone:</strong> {{ worker.phone }}</p>
+          <p class="card-text"><strong>Address:</strong> {{ worker.address }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <h1 class="text-center mb-4">My Profile</h1>
+  <div class="card shadow p-4">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- Profile Picture -->
+      <div class="text-center mb-4">
+       <label for="image">Choose a profile picture:</label>
+       <input type="file" id="image" name="image" accept="image/png, image/jpeg" />
+
+      </div>
+
+      <!-- Full Name -->
+      <div class="mb-3">
+        <label for="full_name" class="form-label">Full Name</label>
+        <input type="text" name="full_name" id="full_name" class="form-control" value="{{ user.get_full_name }}">
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" name="email" id="email" class="form-control" value="{{ user.email }}">
+      </div>
+
+      <!-- Services Offered -->
+      <div class="mb-3">
+        <label for="services" class="form-label">Services Offered</label>
+        <select name="services" id="services" class="form-select">
+          <option value="house_cleaning" {% if user.profile.service == 'house_cleaning' %}selected{% endif %}>House Cleaning/Maids</option>
+          <option value="plumbing" {% if user.profile.service == 'plumbing' %}selected{% endif %}>Plumbing</option>
+          <option value="tutoring" {% if user.profile.service == 'tutoring' %}selected{% endif %}>Tutoring</option>
+          <option value="chefs" {% if user.profile.service == 'chefs' %}selected{% endif %}>Chefs</option>
+          <option value="drivers" {% if user.profile.service == 'drivers' %}selected{% endif %}>Drivers</option>
+        </select>
+      </div>
+
+      <!-- Phone Number -->
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="text" id="phone" name="name" required minlength="10" maxlength="13" size="10" />
+      </div>
+
+      <!-- Address -->
+      <div class="mb-3">
+        <label for="about" class="form-label">About</label>
+        <textarea id="about" name="about" rows="2" cols="30"></textarea>
+      </div>
+
+      <!-- About -->
+      <div class="mb-3">
+        <label for="address" class="form-label">Address</label>
+        <input type="text" id="address" name="about" required minlength="20" maxlength="100" size="10" />
+
+      </div>
+
+      <!-- Rate Charged -->
+      <div class="mb-3">
+        <label for="rate" class="form-label">Rate Charged</label>
+        <input id="rate" type="number" name="rate" value="0" />
+      </div>
+
+      <!-- Location -->
+      <div class="mb-3">
+        <label for="location" class="form-label">location</label>
+        <input type="text" id="location" name="location" required minlength="10" maxlength="20" size="10" />
+
+      </div>
+
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+
+  <!-- Visible Profiles -->
+  <div class="my-5">
+    <h2 class="text-center">Available Professionals</h2>
+    <div class="row">
+      {% for worker in workers %}
+      <div class="col-md-4 mb-4">
+        <div class="card shadow">
+         <input type="file" id="imag" name="image" accept="image/png, image/jpeg" />
+      </div>
+          <div class="card-body">
+            <h5 class="card-title">{{ worker.full_name }}</h5>
+            <p class="card-text"><strong>Service:</strong> {{ worker.get_service_display }}</p>
+            <p class="card-text"><strong>Email:</strong> {{ worker.email }}</p>
+            <p class="card-text"><strong>Phone:</strong> {{ worker.phone }}</p>
+            <p class="card-text"><strong>About:</strong> {{ worker.about }}</p>
+            <p class="card-text"><strong>Rate:</strong> ${{ worker.rate }}/hr</p>
+            <p class="card-text"><strong>Location:</strong> {{ worker.location }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+<style>
+  .container {
+    max-width: 800px;
+  }
+
+  .card {
+    border-radius: 15px;
+    overflow: hidden;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.1rem;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .mb-4 {
+    margin-bottom: 1.5rem;
+  }
+
+  .mb-3 {
+    margin-bottom: 1rem;
+  }
+
+  .my-5 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .shadow {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .form-control-file {
+    border: 1px solid #ddd;
+    padding: 5px;
+  }
+</style>
+
+
+{% endblock %}
