@@ -20,6 +20,120 @@ def SiteView(request):
     return render(request, 'site.html')
 
 
+def RegisterView(request):
+    """ Client Registration """
+    if request.method == "POST":
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists")
+            return redirect('register')
+
+        new_user = User.objects.create_user(
+            first_name=first_name, last_name=last_name,
+            email=email, username=username, password=password
+        )
+
+        # Mark as CLIENT (is_worker=False)
+        Profile.objects.create(user=new_user, is_worker=False)
+
+        messages.success(request, "Client account created. Please Login.")
+        return redirect('login')
+
+    return render(request, 'register.html')
+
+
+def RegView(request):
+    """ Worker/Freelancer Registration """
+    if request.method == "POST":
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists")
+            return redirect('reg')
+
+        new_user = User.objects.create_user(
+            first_name=first_name, last_name=last_name,
+            email=email, username=username, password=password
+        )
+
+        # Mark as WORKER (is_worker=True)
+        Profile.objects.create(user=new_user, is_worker=True)
+
+        messages.success(request, "Professional account created. Please Login.")
+        return redirect('login')
+
+    return render(request, 'reg.html')
+
+
+# --- LOGIN LOGIC (Separated) ---
+
+def LoginView(request):
+    """ Main Client Login """
+    if request.method == "POST":
+        u = request.POST.get("username")
+        p = request.POST.get("password")
+        user = authenticate(request, username=u, password=p)
+
+        if user is not None:
+            # Check if User is a Client
+            if hasattr(user, 'profile') and not user.profile.is_worker:
+                login(request, user)
+                return redirect('home')
+            else:
+                messages.error(request, "This is a Worker account. Please use the Professional login.")
+                return redirect('login')
+        else:
+            messages.error(request, "Invalid credentials")
+
+    return render(request, 'login.html')
+
+
+def WorkerLoginView(request):
+    """ Dedicated Worker Login """
+    if request.method == "POST":
+        u = request.POST.get("username")
+        p = request.POST.get("password")
+        user = authenticate(request, username=u, password=p)
+
+        if user is not None:
+            # Check if User is a Worker
+            if hasattr(user, 'profile') and user.profile.is_worker:
+                login(request, user)
+                return redirect('dashboard')
+            else:
+                messages.error(request, "This is a Client account. Please use the Client login.")
+                return redirect('worker_login')
+        else:
+            messages.error(request, "Invalid credentials")
+
+    return render(request, 'login_worker.html')
+
+
+# --- OTHER VIEWS ---
+
+@login_required
+def LogoutView(request):
+    logout(request)
+    return redirect('login')
+
+
+@login_required
+def dashboard(request):
+    # Ensure only workers see the main dashboard
+    if not request.user.profile.is_worker:
+        return redirect('home')
+    return render(request, 'dashboard.html')
+
+
 @login_required
 def Home(request):
     return render(request, 'index.html')
@@ -312,3 +426,11 @@ def client_dashboard(request):
         'payment_form': payment_form,
     }
     return render(request, 'client_dashboard.html', context)
+def RoleSelection(request):
+    """ The 'Join' landing page where users choose their path """
+    return render(request, 'role_selection.html')
+
+def OnboardingGuide(request, role):
+    """ Shows what users need before they register """
+    is_worker = (role == 'worker')
+    return render(request, 'onboarding_guide.html', {'is_worker': is_worker})
